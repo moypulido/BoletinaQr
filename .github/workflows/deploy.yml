@@ -39,10 +39,10 @@ jobs:
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOST "chmod -R 775 /domains/moisespulido.com"
-          sshpass -p "$SSH_PASSWORD" rsync -avz --bwlimit=200 -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" --exclude=node_modules --exclude=vendor . $SSH_USERNAME@$SSH_HOST:/domains/moisespulido.com
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOST "mkdir -p /home/u612496818/domains/moisespulido.com && chmod -R 775 /home/u612496818/domains/moisespulido.com"
+          sshpass -p "$SSH_PASSWORD" rsync -avz --bwlimit=200 -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" --exclude=node_modules --exclude=vendor . $SSH_USERNAME@$SSH_HOST:/home/u612496818/domains/moisespulido.com
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOST << 'EOF'
-            cd /domains/moisespulido.com
+            cd /home/u612496818/domains/moisespulido.com
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
             npm install
             npm run build
