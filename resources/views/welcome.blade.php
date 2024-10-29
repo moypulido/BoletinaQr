@@ -875,8 +875,7 @@
                                 </svg>
                             </div>
 
-                            <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">el moises hizo esto con
-                                CI/CD ghufghjdtyruftdrfyhj</h2>
+                            <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h2>
 
                             <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                                 Laravel has wonderful documentation covering every aspect of the framework. Whether you
