@@ -1,76 +1,125 @@
 <?php
 
-namespace App\Http;
+namespace Tests\Unit;
 
-use Illuminate\Support\Js;
+use App\Http\ApiResponse;
+use Illuminate\Http\JsonResponse;
 
-class ApiResponse
+class ApiResponseTest
 {
-    
-    /**
-     * success response method.
-     *
-     * @param mixed $data
-     * @param string $message
-     * @param int $code = 200
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function success($data, string $message = "Success", int $code = 200)
+    public function runTests()
     {
-        return response()->json([
+        echo "Running ApiResponse Tests...\n";
+
+        $this->testSuccessResponse();
+        $this->testCreatedResponse();
+        $this->testBadRequestResponse();
+        $this->testUnauthorizedResponse();
+        
+        echo "All tests completed.\n";
+    }
+
+    public function testSuccessResponse()
+    {
+        $data = ['key' => 'value'];
+        $message = "Success";
+        $response = ApiResponse::success($data, $message);
+
+        if (!($response instanceof JsonResponse)) {
+            echo "Failed: testSuccessResponse - Expected instance of JsonResponse\n";
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            echo "Failed: testSuccessResponse - Expected status code 200\n";
+        }
+
+        $expectedData = [
             'status' => 'success',
             'message' => $message,
             'data' => $data,
-        ], $code);
+        ];
+
+        if ($response->getData(true) !== $expectedData) {
+            echo "Failed: testSuccessResponse - Response data does not match expected data\n";
+        }
     }
 
-    /**
-     * created response method.
-     * 
-     * @param mixed $data
-     * @param string $message
-     * @param int $code = 201
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function created($data, string $message = "Created", int $code = 201)
+    public function testCreatedResponse()
     {
-        return response()->json([
+        $data = ['id' => 1];
+        $message = "Resource created";
+        $response = ApiResponse::created($data, $message);
+
+        if (!($response instanceof JsonResponse)) {
+            echo "Failed: testCreatedResponse - Expected instance of JsonResponse\n";
+        }
+
+        if ($response->getStatusCode() !== 201) {
+            echo "Failed: testCreatedResponse - Expected status code 201\n";
+        }
+
+        $expectedData = [
             'status' => 'success',
             'message' => $message,
             'data' => $data,
-        ], $code);
-    }
-    
-    /** 
-     * badRequest response method.
-     * @param mixed $name
-     * @param string $message
-     * @param int $code = 400
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function badRequest($data, string $message = "Bad Request", int $code = 400)
-    {
-        return response()->json([
-            'status' => 'error',
-            'message' => $message,
-            'data' => $data,
-        ], $code);
+        ];
+
+        if ($response->getData(true) !== $expectedData) {
+            echo "Failed: testCreatedResponse - Response data does not match expected data\n";
+        }
     }
 
-    /**
-     * unauthorized response method.
-     * 
-     * @param mixed $data
-     * @param string $message
-     * @param int $code = 401
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function unauthorized($data, string $message = "Unauthorized", int $code = 401)
+    public function testBadRequestResponse()
     {
-        return response()->json([
+        $data = ['error' => 'Invalid input'];
+        $message = "Bad Request";
+        $response = ApiResponse::badRequest($data, $message);
+
+        if (!($response instanceof JsonResponse)) {
+            echo "Failed: testBadRequestResponse - Expected instance of JsonResponse\n";
+        }
+
+        if ($response->getStatusCode() !== 400) {
+            echo "Failed: testBadRequestResponse - Expected status code 400\n";
+        }
+
+        $expectedData = [
             'status' => 'error',
             'message' => $message,
             'data' => $data,
-        ], $code);
+        ];
+
+        if ($response->getData(true) !== $expectedData) {
+            echo "Failed: testBadRequestResponse - Response data does not match expected data\n";
+        }
     }
-}   
+
+    public function testUnauthorizedResponse()
+    {
+        $data = ['error' => 'Not authorized'];
+        $message = "Unauthorized";
+        $response = ApiResponse::unauthorized($data, $message);
+
+        if (!($response instanceof JsonResponse)) {
+            echo "Failed: testUnauthorizedResponse - Expected instance of JsonResponse\n";
+        }
+
+        if ($response->getStatusCode() !== 401) {
+            echo "Failed: testUnauthorizedResponse - Expected status code 401\n";
+        }
+
+        $expectedData = [
+            'status' => 'error',
+            'message' => $message,
+            'data' => $data,
+        ];
+
+        if ($response->getData(true) !== $expectedData) {
+            echo "Failed: testUnauthorizedResponse - Response data does not match expected data\n";
+        }
+    }
+}
+
+// Ejecutar las pruebas manualmente
+$test = new ApiResponseTest();
+$test->runTests();
