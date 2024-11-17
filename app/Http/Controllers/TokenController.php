@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Token;
-use App\Http\Responses;
 
 class TokenController extends Controller
 {
@@ -16,12 +14,12 @@ class TokenController extends Controller
             'updated_at' => now(),
         ]);
 
-        return Responses\ApiResponse::success('Token updated successfully', $token);
-    }
+        return $token;
+    }	
 
     public function get_token()
     {
         $token = Token::find(1);
-        return Responses\ApiResponse::success('Token retrieved successfully', $token);
+        return $token;
     }
 }
