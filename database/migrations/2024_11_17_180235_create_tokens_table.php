@@ -4,8 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\str;
-
 
 return new class extends Migration
 {
@@ -22,7 +20,7 @@ return new class extends Migration
 
         // Insert a single token record
         DB::table('tokens')->insert([
-            'token' => str()->random(60),
+            'token' => 'App-' . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-'), 0, rand(20, 30)).'-Token-BoletosQR',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
