@@ -20,7 +20,7 @@ return new class extends Migration
 
         // Insert a single token record
         DB::table('tokens')->insert([
-            'token' => 'App-' . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-'), 0, rand(20, 30)).'-Token-BoletosQR',
+            'token' => 'App-' . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-'), 0, rand(20, 30)).'-Token-Boletos',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
