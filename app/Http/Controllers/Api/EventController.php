@@ -2,30 +2,44 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Exception;
 
 class EventController extends Controller
 {
     public function index()
-    {
-        return Event::all();
+    { 
+        $Events = Event::all();
+        if ($Events->isEmpty()) {
+            return ApiResponse::error('No events found', 404);
+        }
+        return ApiResponse::success('Events retrieved successfully', $Events);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:events,name',
             'description' => 'nullable|string',
             'event_date' => 'required|date',
             'address' => 'required|string|max:255',
             'price' => 'required|numeric',
         ]);
 
-        $event = Event::create($request->all());
+        if ($validator->fails()) {
+            return ApiResponse::error($validator->errors(), 400);
+        }
 
-        return response()->json($event, 201);
+        try{
+            $event = Event::create($request->all());
+            return ApiResponse::success($event, 'Event created successfully', 201);
+        } catch (Exception $e) {
+            return ApiResponse::error($e->getMessage(), 500);
+        }
     }
 
     public function show($id)
