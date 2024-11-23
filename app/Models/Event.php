@@ -31,4 +31,9 @@ class Event extends Model
     {
         return $query->where('event_date', '>', now());
     }
+
+    public function scopeSearchByName($query, $name)
+    {
+        return $query->where('name', 'like', '%' . $name . '%');
+    }
 }

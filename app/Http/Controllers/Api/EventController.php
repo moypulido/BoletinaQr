@@ -31,7 +31,7 @@ class EventController extends Controller
     {
         try {
             if ($request->has('name')) {
-                $events = Event::where('name', 'like', '%' . $request->name . '%')->get();
+                $events = Event::searchByName($request->name)->get();
                 if ($events->isEmpty()) {
                     return ApiResponse::error('No events found', 404);
                 }
@@ -82,7 +82,7 @@ class EventController extends Controller
             }
 
             $event = Event::create($request->all());
-            return ApiResponse::success($event, 'Event created successfully', 201);
+            return ApiResponse::success('Event created successfully', $event, 201);
         } catch (Exception $e) {
             return ApiResponse::error('An unexpected error occurred', 500);
         }
