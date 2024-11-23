@@ -23,4 +23,20 @@ class Ticket extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'ticket_promotion');
+    }
+
+    public function markAsUsed()
+    {
+        $this->is_used = true;
+        $this->save();
+    }
+
+    public function getStatusTiket()
+    {
+        return $this->is_used ? 'Used' : 'Unused';
+    }
 }

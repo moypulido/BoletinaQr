@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->string('ticket_code')->unique();
             $table->boolean('is_used')->default(false);
-            $table->text('qr_code');
+            $table->binary('qr_code');
             $table->string('email')->nullable();
             $table->string('name')->nullable();
             $table->string('phone')->nullable();

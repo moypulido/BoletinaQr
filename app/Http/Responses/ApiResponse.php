@@ -35,7 +35,6 @@ class ApiResponse
                 'total' => $paginator->total(),
                 'limit' => $paginator->perPage(),
                 'page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
             ],
         ], $status);
     }

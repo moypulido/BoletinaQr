@@ -100,6 +100,9 @@ class EventController extends Controller
     public function show($id)
     {   
         try {
+            if (!is_numeric($id)) {
+                return ApiResponse::error('Invalid event ID', 400);	
+            }
             $event = Event::find($id);
             if (!$event) {
                 return ApiResponse::error('Event not found',  404);

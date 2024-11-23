@@ -21,4 +21,14 @@ class Event extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class);
+    }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('event_date', '>', now());
+    }
 }
