@@ -6,7 +6,13 @@ use App\Models\Token;
 
 class TokenController extends Controller
 {
-    public function update_token()
+    public function show()
+    {
+        $token = Token::find(1);
+        return view('dashboard', ['token' => $token]);
+    }
+
+    public function update()
     {
         $token = Token::find(1);
         $token->update([
@@ -14,12 +20,6 @@ class TokenController extends Controller
             'updated_at' => now(),
         ]);
 
-        return $token;
-    }	
-
-    public function get_token()
-    {
-        $token = Token::find(1);
-        return $token;
+        return redirect()->route('dashboard');
     }
 }

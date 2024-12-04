@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TokenController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,9 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [TokenController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/update-token', [TokenController::class, 'update'])->middleware(['auth', 'verified'])->name('update-token');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
