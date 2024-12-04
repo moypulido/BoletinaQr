@@ -24,7 +24,7 @@ class Event extends Model
 
     public function promotions()
     {
-        return $this->belongsToMany(Promotion::class);
+        return $this->belongsToMany(Promotion::class, 'event_promotion');
     }
 
     public function scopeUpcoming($query)

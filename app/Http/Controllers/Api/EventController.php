@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Promotion;
 use Exception;
 
 class EventController extends Controller
@@ -31,7 +32,7 @@ class EventController extends Controller
     {
         try {
             if ($request->has('name')) {
-                $events = Event::searchByName($request->name)->get();
+                $events = Event::searchByName($request->name)->with('promotions')->get();
                 if ($events->isEmpty()) {
                     return ApiResponse::error('No events found', 404);
                 }
@@ -50,10 +51,10 @@ class EventController extends Controller
             $limit = $request->input('limit', 50);
             $page = $request->input('page', 1);
     
-            $events = Event::paginate($limit, ['*'], 'page', $page);
+            $events = Event::with('promotions')->paginate($limit, ['*'], 'page', $page);
             return ApiResponse::paginate('Events retrieved successfully', $events);
         } catch (Exception $e) {
-            return ApiResponse::error('An unexpected error occurred', 500);
+            return ApiResponse::error('An unexpected error occurred'.$e, 500);
         }
     }
     
@@ -103,7 +104,7 @@ class EventController extends Controller
             if (!is_numeric($id)) {
                 return ApiResponse::error('Invalid event ID', 400);	
             }
-            $event = Event::find($id);
+            $event = Event::find($id)->load('promotions');
             if (!$event) {
                 return ApiResponse::error('Event not found',  404);
             }
@@ -157,6 +158,32 @@ class EventController extends Controller
             return ApiResponse::success('Event deleted successfully');
         } catch (Exception $e) {
             return ApiResponse::error('An unexpected error occurred', 500);
+        }
+    }
+
+    // Attach a promotion to an event
+    public function attachPromotion(Request $request, $eventId, $promotionId)
+    {
+        try {
+            $event = Event::findOrFail($eventId);
+            $promotion = Promotion::findOrFail($promotionId);
+            $event->promotions()->attach($promotion);
+            return ApiResponse::success('Promotion attached to event successfully');
+        } catch (Exception $e) {
+            return ApiResponse::error('Event or Promotion not found', 404);
+        }
+    }
+
+    // Detach a promotion from an event
+    public function detachPromotion(Request $request, $eventId, $promotionId)
+    {
+        try {
+            $event = Event::findOrFail($eventId);
+            $promotion = Promotion::findOrFail($promotionId);
+            $event->promotions()->detach($promotion);
+            return ApiResponse::success('Promotion detached from event successfully');
+        } catch (Exception $e) {
+            return ApiResponse::error('Event or Promotion not found', 404);
         }
     }
 }
